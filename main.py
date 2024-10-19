@@ -9,6 +9,7 @@ height = 600
 screen = pygame.display.set_mode((width, height))
 
 # 캐릭터 위치와 크기 설정
+# TODO - r1이라는 변수명을 조금 더 의미있게 지어주세요. dictionary로 만들어서 체계적으로 관리해주세요 (spaceshooter 참고하면 됩니다.)
 r1 = pygame.Rect(0, height - 130, 60, 100)
 
 # 캐릭터 이미지 불러오기
