@@ -10,7 +10,11 @@ screen = pygame.display.set_mode((width, height))
 
 # 캐릭터 위치와 크기 설정
 # TODO - r1이라는 변수명을 조금 더 의미있게 지어주세요. dictionary로 만들어서 체계적으로 관리해주세요 (spaceshooter 참고하면 됩니다.)
-r1 = pygame.Rect(0, height - 130, 60, 100)
+r1 = pygame.Rect(0, height - 170, 60, 100)
+
+# 배경 이미지 불러오기
+bgImage = pygame.image.load('tsb bg1.jpeg')
+bgImage = pygame.transform.scale(bgImage, (width, height))
 
 # 캐릭터 이미지 불러오기
 right = pygame.image.load('pixel_k-removebg-preview.png')
@@ -53,7 +57,7 @@ while True:
             jumpStep = 4
 
     # 배경 그리기 (화면 지우기)
-    screen.fill((0, 0, 0))  # 검은 배경
+    screen.blit(bgImage, (0, 0))
 
     # 캐릭터 그리기
     screen.blit(knight, r1)
