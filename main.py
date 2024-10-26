@@ -1,4 +1,5 @@
 import pygame, sys
+from monster import Monster
 from pygame.locals import *
 
 pygame.init()
@@ -10,7 +11,7 @@ screen = pygame.display.set_mode((width, height))
 # 캐릭터 데이터 관리
 knight = {
     'rect': pygame.Rect(0, height - 165, 60, 100),
-    'image_right': pygame.transform.scale(pygame.image.load('pixel_k-removebg-preview.png'), (60,100)),
+    'image_right': pygame.transform.scale(pygame.image.load('images/knight.png'), (60, 100)),
     'image_left': None,
     'vl': 5,
     'is_jumping': False,
@@ -18,8 +19,13 @@ knight = {
 }
 knight['image_left'] = pygame.transform.flip(knight['image_right'], True, False)
 knight['image'] = knight['image_right']
+
+
+
+일반몬스터 = Monster('images/일반몬.png', 'images/bullet1.png', 10, 50, (width - 100, height - 200), (100,100))
+monsterlist = [일반몬스터]
 # 배경 이미지 설정
-bg_image = pygame.image.load('tsb bg1.jpeg')
+bg_image = pygame.image.load('images/tsb bg1.jpeg')
 bg_image = pygame.transform.scale(bg_image, (width, height))
 backX, backX2 = 0, width  # 배경 두 장을 이어 붙여 스크롤 효과 구현
 
@@ -36,16 +42,17 @@ while True:
     # 키 입력 처리
     key_input = pygame.key.get_pressed()
     if key_input[K_LEFT] and knight['rect'].left > 0:
-        backX += knight['vl']
-        backX2 += knight['vl']
         knight['rect'].left -= knight['vl']
         knight['image'] = knight['image_left']
 
     if key_input[K_RIGHT] and knight['rect'].right < width:
-        backX -= knight['vl']
-        backX2 -= knight['vl']
-        knight['rect'].right += knight['vl']
+        if knight['rect'].left <= width * 0.5 -30:
+            knight['rect'].right += knight['vl']
+        else:
+            backX -= knight['vl']
+            backX2 -= knight['vl']
         knight['image'] = knight['image_right']
+
 
     # 점프 처리
     if not knight['is_jumping']:
@@ -59,19 +66,25 @@ while True:
             knight['is_jumping'] = False
             knight['jump_step'] = 4
 
+    # 몬스터 리젠
+    for monster in monsterlist:
+        monster.move_left(3)
+
     # 배경 위치 조정 (스크롤 효과)
     if backX < -width:
-        backX = width
+        backX *= -1
     if backX2 < -width:
-        backX2 = width
+        backX2 *= -1
     if backX > 0:
-        backX = -width
-    if backX2 > 0:
-        backX2 = -width
+        backX -= width
+        backX2 -= width
 
     # 배경 그리기 (화면 지우기)
     screen.blit(bg_image, (backX, 0))
     screen.blit(bg_image, (backX2, 0))
+
+    for monster in monsterlist:
+        monster.draw(screen)
 
     # 캐릭터 그리기
     screen.blit(knight['image'], knight['rect'].topleft)
