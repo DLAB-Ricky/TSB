@@ -1,6 +1,5 @@
 import pygame
 
-
 class Monster:
     def __init__(self, image_path, _bullet_imagepath, attack_power, health, position, size):
         # 몬스터 이미지 로드
